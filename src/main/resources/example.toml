@@ -1,0 +1,15 @@
+name = "example"
+perm = "default"
+rows = 3
+title = "VelocityGUI"
+empty = "AIR"
+
+[items]
+  [items.1]
+    material = "OAK_SIGN"
+    stack = 1
+    name = "&dServer Rules"
+    lore = [
+      "&eRule breakers will be banned!"
+    ]
+    enchanted = true
