@@ -44,7 +44,7 @@ public class InventoryBuilder {
      * @param title
      */
     public void setTitle(String title) {
-        this.title = LegacyComponentSerializer.legacy('&').deserialize(title);
+        this.title = LegacyComponentSerializer.legacyAmpersand().deserialize(title);
     }
 
     /**
@@ -70,12 +70,12 @@ public class InventoryBuilder {
         guiItems.forEach((index, guiItem) -> {
             //Set the item Material, Name and Amount
             ItemStack itemStack = new ItemStack(ItemType.valueOf(guiItem.getMaterial()));
-            itemStack.displayName(LegacyComponentSerializer.legacy('&').deserialize(guiItem.getName()));
+            itemStack.displayName(LegacyComponentSerializer.legacyAmpersand().deserialize(guiItem.getName()));
             itemStack.amount(guiItem.getStack());
 
             //Set any lore on the item
             for(String lore : guiItem.getLore()) {
-                itemStack.addToLore(LegacyComponentSerializer.legacy('&').deserialize(lore));
+                itemStack.addToLore(LegacyComponentSerializer.legacyAmpersand().deserialize(lore));
             }
 
             //Set enchantment on the item if needed

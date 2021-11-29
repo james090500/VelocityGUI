@@ -39,8 +39,6 @@ public class Configs {
             String fileName = file.getName().replace(".toml", "");
             panels.put(fileName, new Toml().read(file).to(Panel.class));
         }
-
-        velocityGUI.getLogger().info(panels.get("example").toString());
     }
 
     public class Panel {
@@ -50,6 +48,7 @@ public class Configs {
         @Getter private int rows;
         @Getter private String title;
         @Getter private String empty;
+        @Getter private String sound;
         @Getter private HashMap<Integer, Item> items;
 
         @Override
@@ -60,6 +59,7 @@ public class Configs {
                     ", rows=" + rows +
                     ", title='" + title + '\'' +
                     ", empty='" + empty + '\'' +
+                    ", sound='" + sound + '\'' +
                     ", items=" + items +
                     '}';
         }
@@ -72,7 +72,7 @@ public class Configs {
         @Getter private byte stack;
         @Getter private String[] lore;
         @Getter private boolean enchanted;
-
+        @Getter private String[] commands;
 
         @Override
         public String toString() {

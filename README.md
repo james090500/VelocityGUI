@@ -1,5 +1,6 @@
 # 📑 VelocityGUI
 A Proxy wide GUI for Velocity
+**Requires [Protocolize](https://simplixsoft.com/protocolize)**
 
 ## Permissions
 | Permission | Purpose |

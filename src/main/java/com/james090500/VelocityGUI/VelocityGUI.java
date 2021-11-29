@@ -21,10 +21,10 @@ import java.nio.file.Path;
 @Plugin(id = "velocitygui", name = "VelocityGUI", version = "1.0-SNAPSHOT", description = "GUIs for the entire Proxy", authors = { "james095000" })
 public class VelocityGUI {
 
-    private final ProxyServer server;
+    public final String PREFIX = "&a[VelocityGUI] ";
+    @Getter private final ProxyServer server;
     @Getter private final Logger logger;
     @Getter private final Path dataDirectory;
-
 
     @Inject
     public VelocityGUI(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory) {
@@ -43,11 +43,15 @@ public class VelocityGUI {
         final CommandHandler handler = new CommandHandler(this);
         server.getCommandManager().register(server.getCommandManager().metaBuilder("vgui").build(), new BrigadierCommand(
             LiteralArgumentBuilder.<CommandSource>literal("vgui")
-                .executes(handler::about)
                 .requires(source -> source.hasPermission("vgui.admin"))
+                .executes(handler::about)
+                .then(LiteralArgumentBuilder.<CommandSource>literal("reload").executes(handler::reload))
+        ));
+
+        server.getCommandManager().register(server.getCommandManager().metaBuilder("vgui").build(), new BrigadierCommand(
+            LiteralArgumentBuilder.<CommandSource>literal("vgui")
                 .then(LiteralArgumentBuilder.<CommandSource>literal("panel").executes(handler::panel))
                 .then(LiteralArgumentBuilder.<CommandSource>literal("panel").then(RequiredArgumentBuilder.<CommandSource, String>argument("name", StringArgumentType.word()).executes(handler::panel)))
-                .then(LiteralArgumentBuilder.<CommandSource>literal("reload").executes(handler::reload))
         ));
     }
 }

@@ -3,6 +3,7 @@ perm = "default"
 rows = 3
 title = "VelocityGUI"
 empty = "AIR"
+sound = "ENTITY_ARROW_HIT_PLAYER"
 
 [items]
   [items.1]
