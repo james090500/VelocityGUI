@@ -31,8 +31,6 @@ public class VelocityGUI {
         this.server = server;
         this.logger = logger;
         this.dataDirectory = dataDirectory;
-
-        logger.info("Hello there, it's a test plugin I made!");
     }
 
     @Subscribe
@@ -42,16 +40,10 @@ public class VelocityGUI {
         //Setup command flow
         final CommandHandler handler = new CommandHandler(this);
         server.getCommandManager().register(server.getCommandManager().metaBuilder("vgui").build(), new BrigadierCommand(
-            LiteralArgumentBuilder.<CommandSource>literal("vgui")
-                .requires(source -> source.hasPermission("vgui.admin"))
-                .executes(handler::about)
-                .then(LiteralArgumentBuilder.<CommandSource>literal("reload").executes(handler::reload))
-        ));
-
-        server.getCommandManager().register(server.getCommandManager().metaBuilder("vgui").build(), new BrigadierCommand(
-            LiteralArgumentBuilder.<CommandSource>literal("vgui")
+            LiteralArgumentBuilder.<CommandSource>literal("vgui").executes(handler::about)
                 .then(LiteralArgumentBuilder.<CommandSource>literal("panel").executes(handler::panel))
                 .then(LiteralArgumentBuilder.<CommandSource>literal("panel").then(RequiredArgumentBuilder.<CommandSource, String>argument("name", StringArgumentType.word()).executes(handler::panel)))
+                .then(LiteralArgumentBuilder.<CommandSource>literal("reload").requires(source -> source.hasPermission("vgui.admin")).executes(handler::reload))
         ));
     }
 }

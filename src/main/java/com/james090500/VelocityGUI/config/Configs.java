@@ -15,6 +15,10 @@ public class Configs {
 
     @Getter private static HashMap<String, Panel> panels = new HashMap<>();
 
+    /**
+     * Loads the config files.
+     * @param velocityGUI
+     */
     public static void loadConfigs(VelocityGUI velocityGUI) {
         //Create data directory
         if(!velocityGUI.getDataDirectory().toFile().exists()) {
@@ -45,7 +49,7 @@ public class Configs {
 
         @Getter private String name;
         @Getter private String perm;
-        @Getter private int rows;
+        @Getter private int rows ;
         @Getter private String title;
         @Getter private String empty;
         @Getter private String sound;
@@ -67,12 +71,28 @@ public class Configs {
 
     public class Item {
 
-        @Getter private String name;
+        private String name;
         @Getter private String material;
-        @Getter private byte stack;
+        private byte stack;
         @Getter private String[] lore;
         @Getter private boolean enchanted;
         @Getter private String[] commands;
+
+        /**
+         * Return name or make empty if missed from config
+         * @return
+         */
+        public String getName() {
+            return (name != null) ? name : "&f";
+        }
+
+        /**
+         * If stack is missed from config make it 1
+         * @return
+         */
+        public byte getStack() {
+            return (stack > 0) ? stack : 1;
+        }
 
         @Override
         public String toString() {

@@ -17,6 +17,12 @@ public class CommandHandler {
         this.velocityGUI = velocityGUI;
     }
 
+    /**
+     * The command for /vgui panel
+     * Handles listing panel and passes a valid argument to the InventoryLauncher
+     * @param commandSourceCommandContext
+     * @return
+     */
     public int panel(CommandContext<CommandSource> commandSourceCommandContext) {
         Player player = (Player) commandSourceCommandContext.getSource();
         ParsedArgument<CommandSource, ?> nameArgument = commandSourceCommandContext.getArguments().get("name");
@@ -35,6 +41,11 @@ public class CommandHandler {
         return 1;
     }
 
+    /**
+     * Reloads the configs
+     * @param commandSourceCommandContext
+     * @return
+     */
     public int reload(CommandContext<CommandSource> commandSourceCommandContext) {
         Configs.loadConfigs(velocityGUI);
         CommandSource source = commandSourceCommandContext.getSource();
@@ -43,6 +54,11 @@ public class CommandHandler {
         return 1;
     }
 
+    /**
+     * A bit of basic about information
+     * @param commandSourceCommandContext
+     * @return
+     */
     public int about(CommandContext<CommandSource> commandSourceCommandContext) {
         CommandSource source = commandSourceCommandContext.getSource();
         source.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(velocityGUI.PREFIX + "VelocityGUI by james090500"));

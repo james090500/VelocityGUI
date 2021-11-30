@@ -1,16 +1,20 @@
 name = "example"
 perm = "default"
 rows = 3
-title = "VelocityGUI"
-empty = "AIR"
+title = "&dVelocityGUI"
+empty = "GREEN_STAINED_GLASS_PANE"
 sound = "ENTITY_ARROW_HIT_PLAYER"
 
 [items]
-  [items.1]
-    material = "OAK_SIGN"
-    stack = 1
-    name = "&dServer Rules"
-    lore = [
-      "&eRule breakers will be banned!"
-    ]
-    enchanted = true
+[items.13]
+material = "OAK_SIGN"
+stack = 1
+name = "&dVelocityGUI"
+lore = [
+  "&eA Velociy Side GUI",
+  "&eFor all your servers"
+]
+enchanted = true
+commands = [
+  "sudo= I love VelocityGUI"
+]

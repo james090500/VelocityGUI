@@ -18,6 +18,11 @@ public class InventoryLauncher {
         this.velocityGUI = velocityGUI;
     }
 
+    /**
+     * Launches an inventory instance from a panel
+     * @param panelName
+     * @param player
+     */
     public void execute(String panelName, Player player) {
         Configs.Panel panel = Configs.getPanels().get(panelName);
         if(panel == null) {
@@ -31,7 +36,7 @@ public class InventoryLauncher {
             return;
         }
 
-        InventoryBuilder inventoryBuilder = new InventoryBuilder(player.getProtocolVersion());
+        InventoryBuilder inventoryBuilder = new InventoryBuilder(velocityGUI, player);
         inventoryBuilder.setRows(panel.getRows());
         inventoryBuilder.setTitle(panel.getTitle());
         inventoryBuilder.setEmpty(panel.getEmpty());

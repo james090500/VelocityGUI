@@ -37,7 +37,7 @@ public class InventoryClickHandler {
                     player.spoofChatInput(splitCommand[1]);
                     break;
                 case "server":
-                    player.createConnectionRequest(velocityGUI.getServer().getServer(splitCommand[1]).get());
+                    player.createConnectionRequest(velocityGUI.getServer().getServer(splitCommand[1]).get()).connect();
                     break;
             }
         }

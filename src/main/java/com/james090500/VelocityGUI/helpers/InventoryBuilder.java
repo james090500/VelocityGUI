@@ -1,7 +1,8 @@
 package com.james090500.VelocityGUI.helpers;
 
+import com.james090500.VelocityGUI.VelocityGUI;
 import com.james090500.VelocityGUI.config.Configs;
-import com.velocitypowered.api.network.ProtocolVersion;
+import com.velocitypowered.api.proxy.Player;
 import dev.simplix.protocolize.api.inventory.Inventory;
 import dev.simplix.protocolize.api.item.ItemStack;
 import dev.simplix.protocolize.data.ItemType;
@@ -17,7 +18,8 @@ import java.util.List;
 
 public class InventoryBuilder {
 
-    @Getter private int protocolVersion;
+    private VelocityGUI velocityGUI;
+    @Getter private Player player;
     @Getter private InventoryType rows;
     @Getter private TextComponent title;
     @Getter private List<ItemStack> emptyItems = new ArrayList<>();
@@ -25,10 +27,12 @@ public class InventoryBuilder {
 
     /**
      * The builder
-     * @param protocolVersion
+     * @param velocityGUI
+     * @param player
      */
-    public InventoryBuilder(ProtocolVersion protocolVersion) {
-        this.protocolVersion = protocolVersion.getProtocol();
+    public InventoryBuilder(VelocityGUI velocityGUI, Player player) {
+        this.velocityGUI = velocityGUI;
+        this.player = player;
     }
 
     /**
@@ -56,7 +60,7 @@ public class InventoryBuilder {
         itemStack.displayName("");
         itemStack.amount((byte) 1);
 
-        int totalSlots = this.getRows().getTypicalSize(protocolVersion);
+        int totalSlots = this.getRows().getTypicalSize(player.getProtocolVersion().getProtocol());
         for(int i = 0; i < totalSlots; i++) {
             emptyItems.add(itemStack);
         }
@@ -69,17 +73,32 @@ public class InventoryBuilder {
     public void setItems(HashMap<Integer, Configs.Item> guiItems) {
         guiItems.forEach((index, guiItem) -> {
             //Set the item Material, Name and Amount
-            ItemStack itemStack = new ItemStack(ItemType.valueOf(guiItem.getMaterial()));
+            ItemStack itemStack;
+            if(guiItem.getMaterial().startsWith("head=")) {
+                itemStack = new ItemStack(ItemType.PLAYER_HEAD);
+            } else {
+                try {
+                    itemStack = new ItemStack(ItemType.valueOf(guiItem.getMaterial()));
+                } catch (IllegalArgumentException e) {
+                    itemStack = new ItemStack(ItemType.STONE);
+                    this.velocityGUI.getLogger().error("Invalid Material! " + guiItem.getMaterial());
+                }
+            }
+
             itemStack.displayName(LegacyComponentSerializer.legacyAmpersand().deserialize(guiItem.getName()));
             itemStack.amount(guiItem.getStack());
 
             //Set any lore on the item
-            for(String lore : guiItem.getLore()) {
-                itemStack.addToLore(LegacyComponentSerializer.legacyAmpersand().deserialize(lore));
+            if(guiItem.getLore() != null) {
+                for (String lore : guiItem.getLore()) {
+                    itemStack.addToLore(LegacyComponentSerializer.legacyAmpersand().deserialize(lore));
+                }
             }
 
-            //Set enchantment on the item if needed
+            //Get the item NBT
             CompoundTag tag = itemStack.nbtData();
+
+            //Set enchantment on the item if needed
             if(guiItem.isEnchanted()) {
                 ListTag<CompoundTag> enchantments = new ListTag<>(CompoundTag.class);
                 CompoundTag enchantment = new CompoundTag();
@@ -88,6 +107,38 @@ public class InventoryBuilder {
                 enchantments.add(enchantment);
                 tag.put("Enchantments", enchantments);
             }
+
+            //If a player heads lets do this
+            if(guiItem.getMaterial().startsWith("head= ")) {
+                String headData = guiItem.getMaterial().replace("head= ", "");
+                if(headData.equals("self")) {
+                    tag.put("SkullOwner", new StringTag(player.getUsername()));
+
+                } else {
+                    CompoundTag skullOwnerTag = tag.getCompoundTag("SkullOwner");
+                    CompoundTag propertiesTag = tag.getCompoundTag("Properties");
+                    ListTag<CompoundTag> texturesTag = new ListTag<>(CompoundTag.class);
+                    CompoundTag textureTag = new CompoundTag();
+
+                    if (skullOwnerTag == null) {
+                        skullOwnerTag = new CompoundTag();
+                    }
+                    if (propertiesTag == null) {
+                        propertiesTag = new CompoundTag();
+                    }
+
+                    textureTag.put("Value", new StringTag(headData));
+                    texturesTag.add(textureTag);
+                    propertiesTag.put("textures", texturesTag);
+                    skullOwnerTag.put("Properties", propertiesTag);
+                    skullOwnerTag.put("Name", new StringTag(headData));
+                    tag.put("SkullOwner", skullOwnerTag);
+                }
+
+                //Set item NBT
+                itemStack.nbtData(tag);
+            }
+
             tag.put("HideFlags", new IntTag(99));
             tag.put("overrideMeta", new ByteTag((byte)1));
 
