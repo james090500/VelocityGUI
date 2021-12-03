@@ -40,8 +40,8 @@ public class Configs {
         }
 
         for(File file : panelDir.listFiles()) {
-            String fileName = file.getName().replace(".toml", "");
-            panels.put(fileName, new Toml().read(file).to(Panel.class));
+            Panel panel = new Toml().read(file).to(Panel.class);
+            panels.put(panel.getName(), panel);
         }
     }
 
@@ -53,6 +53,7 @@ public class Configs {
         @Getter private String title;
         @Getter private String empty;
         @Getter private String sound;
+        @Getter private String[] commands;
         @Getter private HashMap<Integer, Item> items;
 
         @Override
