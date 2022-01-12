@@ -48,7 +48,7 @@ public class InventoryBuilder {
      * @param title
      */
     public void setTitle(String title) {
-        this.title = LegacyComponentSerializer.legacyAmpersand().deserialize(title);
+        this.title = PlaceholderParser.of(this.player, title);
     }
 
     /**
@@ -85,13 +85,13 @@ public class InventoryBuilder {
                 }
             }
 
-            itemStack.displayName(LegacyComponentSerializer.legacyAmpersand().deserialize(guiItem.getName()));
+            itemStack.displayName(PlaceholderParser.of(this.player, guiItem.getName()));
             itemStack.amount(guiItem.getStack());
 
             //Set any lore on the item
             if(guiItem.getLore() != null) {
                 for (String lore : guiItem.getLore()) {
-                    itemStack.addToLore(LegacyComponentSerializer.legacyAmpersand().deserialize(lore));
+                    itemStack.addToLore(PlaceholderParser.of(this.player, lore));
                 }
             }
 

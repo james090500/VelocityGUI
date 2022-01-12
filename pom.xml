@@ -6,7 +6,7 @@
 
     <groupId>com.james090500.VelocityGUI</groupId>
     <artifactId>VelocityGUI</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -27,6 +27,13 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.mineacademy</groupId>
+            <artifactId>velocitycontrol</artifactId>
+            <version>3.9.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/VelocityControl-Red-3.9.2.jar</systemPath>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
