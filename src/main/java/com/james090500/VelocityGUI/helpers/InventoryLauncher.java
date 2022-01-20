@@ -23,17 +23,17 @@ public class InventoryLauncher {
      * @param panelName
      * @param player
      */
-    public void execute(String panelName, Player player) {
+    public boolean execute(String panelName, Player player) {
         Configs.Panel panel = Configs.getPanels().get(panelName);
         if(panel == null) {
             player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(velocityGUI.PREFIX + "Panel not found"));
-            return;
+            return false;
         }
 
         //Stop players with no permissions
         if(!panel.getPerm().equalsIgnoreCase("default") && !player.hasPermission(panel.getPerm())) {
             player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(velocityGUI.PREFIX + "Panel not found"));
-            return;
+            return false;
         }
 
         InventoryBuilder inventoryBuilder = new InventoryBuilder(velocityGUI, player);
@@ -56,5 +56,7 @@ public class InventoryLauncher {
         if(panel.getSound() != null) {
             protocolizePlayer.playSound(Sound.valueOf(panel.getSound()), SoundCategory.MASTER, 1f, 1f);
         }
+        
+        return true
     }
 }
