@@ -27,7 +27,6 @@ public class InventoryClickHandler {
             String[] splitCommand = command.split("= ");
             switch(splitCommand[0]) {
                 case "open":
-                    click.player().registeredInventories().clear();
                     new InventoryLauncher(velocityGUI).execute(splitCommand[1], player);
                     break;
                 case "close":

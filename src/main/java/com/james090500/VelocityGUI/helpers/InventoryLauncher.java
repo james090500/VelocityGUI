@@ -24,17 +24,23 @@ public class InventoryLauncher {
      * @param player
      */
     public void execute(String panelName, Player player) {
+        ProtocolizePlayer protocolizePlayer = Protocolize.playerProvider().player(player.getUniqueId());
+
         Configs.Panel panel = Configs.getPanels().get(panelName);
         if(panel == null) {
+            protocolizePlayer.closeInventory();
             player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(velocityGUI.PREFIX + "Panel not found"));
             return;
         }
 
         //Stop players with no permissions
         if(!panel.getPerm().equalsIgnoreCase("default") && !player.hasPermission(panel.getPerm())) {
+            protocolizePlayer.closeInventory();
             player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(velocityGUI.PREFIX + "Panel not found"));
             return;
         }
+
+        protocolizePlayer.registeredInventories().clear();
 
         InventoryBuilder inventoryBuilder = new InventoryBuilder(velocityGUI, player);
         inventoryBuilder.setRows(panel.getRows());
@@ -43,14 +49,12 @@ public class InventoryLauncher {
         inventoryBuilder.setItems(panel.getItems());
         Inventory inventory = inventoryBuilder.build();
         inventory.onClick(click -> {
-            click.cancelled(true);
             Configs.Item item = panel.getItems().get(click.slot());
             if(item != null && item.getCommands() != null) {
                 new InventoryClickHandler(velocityGUI).execute(item.getCommands(), click);
             }
         });
 
-        ProtocolizePlayer protocolizePlayer = Protocolize.playerProvider().player(player.getUniqueId());
         protocolizePlayer.openInventory(inventory);
 
         if(panel.getSound() != null) {
