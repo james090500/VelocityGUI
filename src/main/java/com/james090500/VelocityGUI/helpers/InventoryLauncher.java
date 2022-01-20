@@ -44,13 +44,13 @@ public class InventoryLauncher {
         inventoryBuilder.setEmpty(panel.getEmpty());
         inventoryBuilder.setItems(panel.getItems());
         Inventory inventory = inventoryBuilder.build();
-        inventory.onClick(click -> {
+        if (!returnState) {inventory.onClick(click -> {
             click.cancelled(true);
             Configs.Item item = panel.getItems().get(click.slot());
             if(item != null && item.getCommands() != null) {
                 new InventoryClickHandler(velocityGUI).execute(item.getCommands(), click);
             }
-        });
+        });}
 
         ProtocolizePlayer protocolizePlayer = Protocolize.playerProvider().player(player.getUniqueId());
         protocolizePlayer.openInventory(inventory);
