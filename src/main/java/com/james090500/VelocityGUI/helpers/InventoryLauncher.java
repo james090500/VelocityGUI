@@ -44,7 +44,7 @@ public class InventoryLauncher {
         inventoryBuilder.setEmpty(panel.getEmpty());
         inventoryBuilder.setItems(panel.getItems());
         Inventory inventory = inventoryBuilder.build();
-        if (!returnState) {inventory.onClick(click -> {
+        if (returnState) {inventory.onClick(click -> {
             click.cancelled(true);
             Configs.Item item = panel.getItems().get(click.slot());
             if(item != null && item.getCommands() != null) {
