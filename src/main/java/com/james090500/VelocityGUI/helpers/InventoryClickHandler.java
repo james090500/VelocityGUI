@@ -28,8 +28,11 @@ public class InventoryClickHandler {
             switch(splitCommand[0]) {
                 case "open":
                     click.player().registeredInventories().clear();
-                    new InventoryLauncher(velocityGUI).execute(splitCommand[1], player);
-                    break;
+
+                    if (!(new InventoryLauncher(velocityGUI).execute(splitCommand[1], player))) {
+                        ProtocolizePlayer protocolizePlayer = Protocolize.playerProvider().player(player.getUniqueId());
+                        protocolizePlayer.closeInventory();
+                    }
                 case "close":
                     click.player().closeInventory();
                     break;
