@@ -35,6 +35,9 @@ public class InventoryClickHandler {
                 case "sudo":
                     player.spoofChatInput(splitCommand[1]);
                     break;
+                case "vsudo":
+                    velocityGUI.getServer().getCommandManager().executeAsync(player, splitCommand[1]);
+                    break;
                 case "server":
                     player.createConnectionRequest(velocityGUI.getServer().getServer(splitCommand[1]).get()).connect();
                     break;
