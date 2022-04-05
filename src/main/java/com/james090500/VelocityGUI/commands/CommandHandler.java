@@ -7,6 +7,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.ParsedArgument;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class CommandHandler {
@@ -24,6 +25,12 @@ public class CommandHandler {
      * @return
      */
     public int panel(CommandContext<CommandSource> commandSourceCommandContext) {
+        if(!(commandSourceCommandContext.getSource() instanceof Player)) {
+            Component error = LegacyComponentSerializer.legacyAmpersand().deserialize(velocityGUI.PREFIX + "Only a player can run these commands");
+            commandSourceCommandContext.getSource().sendMessage(error);
+            return 0;
+        }
+
         Player player = (Player) commandSourceCommandContext.getSource();
         ParsedArgument<CommandSource, ?> nameArgument = commandSourceCommandContext.getArguments().get("name");
         if(nameArgument == null) {
