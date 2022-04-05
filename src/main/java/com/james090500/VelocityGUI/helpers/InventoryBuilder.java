@@ -7,23 +7,24 @@ import dev.simplix.protocolize.api.inventory.Inventory;
 import dev.simplix.protocolize.api.item.ItemStack;
 import dev.simplix.protocolize.data.ItemType;
 import dev.simplix.protocolize.data.inventory.InventoryType;
+import lombok.AccessLevel;
 import lombok.Getter;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.Component;
 import net.querz.nbt.tag.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Getter
 public class InventoryBuilder {
 
-    private VelocityGUI velocityGUI;
-    @Getter private Player player;
-    @Getter private InventoryType rows;
-    @Getter private TextComponent title;
-    @Getter private List<ItemStack> emptyItems = new ArrayList<>();
-    @Getter private HashMap<Integer, ItemStack> items = new HashMap<>();
+    @Getter(AccessLevel.NONE) private VelocityGUI velocityGUI;
+    private Player player;
+    private InventoryType rows;
+    private Component title;
+    private List<ItemStack> emptyItems = new ArrayList<>();
+    private HashMap<Integer, ItemStack> items = new HashMap<>();
 
     /**
      * The builder
@@ -44,7 +45,7 @@ public class InventoryBuilder {
     }
 
     /**
-     * Sets the title and converts a string to a TextComponent
+     * Sets the title and converts a string to a Component
      * @param title
      */
     public void setTitle(String title) {

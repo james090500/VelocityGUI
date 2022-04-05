@@ -49,6 +49,7 @@ public class InventoryLauncher {
         inventoryBuilder.setItems(panel.getItems());
         Inventory inventory = inventoryBuilder.build();
         inventory.onClick(click -> {
+            click.cancelled(true);
             Configs.Item item = panel.getItems().get(click.slot());
             if(item != null && item.getCommands() != null) {
                 new InventoryClickHandler(velocityGUI).execute(item.getCommands(), click);
