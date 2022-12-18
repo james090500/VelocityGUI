@@ -4,6 +4,7 @@ import com.james090500.VelocityGUI.VelocityGUI;
 import com.james090500.VelocityGUI.config.Configs;
 import com.velocitypowered.api.proxy.Player;
 import dev.simplix.protocolize.api.inventory.Inventory;
+import dev.simplix.protocolize.api.item.BaseItemStack;
 import dev.simplix.protocolize.api.item.ItemStack;
 import dev.simplix.protocolize.data.ItemType;
 import dev.simplix.protocolize.data.inventory.InventoryType;
@@ -23,7 +24,7 @@ public class InventoryBuilder {
     private Player player;
     private InventoryType rows;
     private Component title;
-    private List<ItemStack> emptyItems = new ArrayList<>();
+    private List<BaseItemStack> emptyItems = new ArrayList<>();
     private HashMap<Integer, ItemStack> items = new HashMap<>();
 
     /**
