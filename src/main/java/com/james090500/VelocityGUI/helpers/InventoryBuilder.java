@@ -3,6 +3,7 @@ package com.james090500.VelocityGUI.helpers;
 import com.james090500.VelocityGUI.VelocityGUI;
 import com.james090500.VelocityGUI.config.Configs;
 import com.velocitypowered.api.proxy.Player;
+import dev.simplix.protocolize.api.chat.ChatElement;
 import dev.simplix.protocolize.api.inventory.Inventory;
 import dev.simplix.protocolize.api.item.BaseItemStack;
 import dev.simplix.protocolize.api.item.ItemStack;
@@ -20,17 +21,18 @@ import java.util.List;
 @Getter
 public class InventoryBuilder {
 
-    @Getter(AccessLevel.NONE) private VelocityGUI velocityGUI;
-    private Player player;
+    @Getter(AccessLevel.NONE)
+    private final VelocityGUI velocityGUI;
+    private final Player player;
     private InventoryType rows;
     private Component title;
-    private List<BaseItemStack> emptyItems = new ArrayList<>();
-    private HashMap<Integer, ItemStack> items = new HashMap<>();
+    private final List<BaseItemStack> emptyItems = new ArrayList<>();
+    private final HashMap<Integer, ItemStack> items = new HashMap<>();
 
     /**
      * The builder
-     * @param velocityGUI
-     * @param player
+     * @param velocityGUI The current gui
+     * @param player The player
      */
     public InventoryBuilder(VelocityGUI velocityGUI, Player player) {
         this.velocityGUI = velocityGUI;
@@ -39,7 +41,7 @@ public class InventoryBuilder {
 
     /**
      * Sets the rows of the GUI to display
-     * @param rows
+     * @param rows The amount of rows
      */
     public void setRows(int rows) {
         this.rows = getInventoryType(rows);
@@ -47,7 +49,7 @@ public class InventoryBuilder {
 
     /**
      * Sets the title and converts a string to a Component
-     * @param title
+     * @param title The gui title
      */
     public void setTitle(String title) {
         this.title = PlaceholderParser.of(this.player, title);
@@ -55,11 +57,11 @@ public class InventoryBuilder {
 
     /**
      * Set the empty item
-     * @param item
+     * @param item The empty item type
      */
     public void setEmpty(String item) {
         ItemStack itemStack = new ItemStack(ItemType.valueOf(item));
-        itemStack.displayName("");
+        itemStack.displayName(ChatElement.ofLegacyText(""));
         itemStack.amount((byte) 1);
 
         int totalSlots = this.getRows().getTypicalSize(player.getProtocolVersion().getProtocol());
@@ -70,7 +72,7 @@ public class InventoryBuilder {
 
     /**
      * Add items to the panel
-     * @param guiItems
+     * @param guiItems The items in the gui
      */
     public void setItems(HashMap<Integer, Configs.Item> guiItems) {
         guiItems.forEach((index, guiItem) -> {
@@ -87,13 +89,13 @@ public class InventoryBuilder {
                 }
             }
 
-            itemStack.displayName(PlaceholderParser.of(this.player, guiItem.getName()));
+            itemStack.displayName(ChatElement.of(PlaceholderParser.of(this.player, guiItem.getName())));
             itemStack.amount(guiItem.getStack());
 
             //Set any lore on the item
             if(guiItem.getLore() != null) {
                 for (String lore : guiItem.getLore()) {
-                    itemStack.addToLore(PlaceholderParser.of(this.player, lore));
+                    itemStack.addToLore(ChatElement.of(PlaceholderParser.of(this.player, lore)));
                 }
             }
 
@@ -151,38 +153,30 @@ public class InventoryBuilder {
 
     /**
      * Get the type of inventory by the rows
-     * @param value
-     * @return
+     * @param value The rows in the inventory
+     * @return The inventory type
      */
     private InventoryType getInventoryType(int value) {
-        switch(value) {
-            case 1:
-                return InventoryType.GENERIC_9X1;
-            case 2:
-                return InventoryType.GENERIC_9X2;
-            case 3:
-                return InventoryType.GENERIC_9X3;
-            case 4:
-                return InventoryType.GENERIC_9X4;
-            case 5:
-                return InventoryType.GENERIC_9X5;
-            default:
-                return InventoryType.GENERIC_9X6;
-        }
+        return switch (value) {
+            case 1 -> InventoryType.GENERIC_9X1;
+            case 2 -> InventoryType.GENERIC_9X2;
+            case 3 -> InventoryType.GENERIC_9X3;
+            case 4 -> InventoryType.GENERIC_9X4;
+            case 5 -> InventoryType.GENERIC_9X5;
+            default -> InventoryType.GENERIC_9X6;
+        };
     }
 
     /**
      * Build the inventory
-     * @return
+     * @return The inventory instance
      */
     public Inventory build() {
         Inventory inventory = new Inventory(this.getRows());
-        inventory.title(this.getTitle());
+        inventory.title(ChatElement.of(this.getTitle()));
         inventory.items(this.getEmptyItems());
 
-        this.getItems().forEach((index, item) -> {
-            inventory.item(index, item);
-        });
+        this.getItems().forEach(inventory::item);
 
         return inventory;
     }

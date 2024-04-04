@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 
 import java.nio.file.Path;
 
-@Plugin(id = "velocitygui", name = "VelocityGUI", version = "1.2.5", description = "GUIs for the entire Proxy", authors = { "james095000" })
+@Plugin(id = "velocitygui", name = "VelocityGUI", version = "1.2.6", description = "GUIs for the entire Proxy", authors = { "james095000" })
 public class VelocityGUI {
 
     public final String PREFIX = "&a[VelocityGUI] ";
